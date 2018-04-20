@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import Main from './app/components/Main';
 import Login from './app/components/Login';
-
+import Logout from './app/components/Logout';
 
 // class HomeScreen extends React.Component{
 //   static navigationOptions = {
@@ -38,6 +38,7 @@ import Login from './app/components/Login';
 
 const NavigationApp = StackNavigator({
   Login : { screen : Login },
+  Logout : { screen : Logout }
 });
 
 export default class App extends React.Component {

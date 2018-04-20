@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View , DrawerLayoutAndroid , ScrollView , ToastAndroid , ToolbarAndroid,
-         TouchableOpacity , Button , TextInput , Alert , ActivityIndicator
+         TouchableOpacity , Button , TextInput , Alert , ActivityIndicator , KeyboardAvoidingView
        } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Main from './Main';
@@ -52,7 +52,7 @@ export default class Login extends React.Component {
 
   logOut(){
     firebase.auth().signOut().then(() => {
-        this.setState({ status : false , loaded : true })
+        this.setState({ status : false , loaded : true , email : '' , password : '' })
 }).catch((e) => {
         console.log(e.toString());
 });
@@ -68,7 +68,7 @@ export default class Login extends React.Component {
           //this.checkLogin();
 
         }).catch((err) => {
-          Alert.alert(err.message)
+          Alert.alert('Warning !',err.message);
         })
     }
    catch (e)
@@ -81,7 +81,7 @@ export default class Login extends React.Component {
 
 
   render() {
-
+    const { navigate } = this.props.navigation;
     if(this.state.status == true && this.state.loaded == true)
     {
       return <Main name = {this.logOut.bind(this)}/>;
@@ -102,9 +102,9 @@ export default class Login extends React.Component {
       underlineColorAndroid = 'rgba(0,0,0,0)'
       onChangeText = { (password) => this.setState({ password }) }
       secureTextEntry = {true} autoCorrect = {false} placeholder = 'Password'/>
-      <Button color = '#424242' style = {styles.button} title = 'Login' onPress = { () => this.loginUser(this.state.email,this.state.password) } />
+      <TouchableOpacity style = {styles.button} onPress = { () => this.loginUser(this.state.email,this.state.password) }><Text style = { styles.buttonText } >Login</Text></TouchableOpacity>
       <View style = {styles.signupTextContent}>
-      <Text style = {styles.signupText} >Don't have an account ? Sign Up</Text>
+      <View style = {styles.signUpView} ><Text style = {styles.signupText} >Don't have an account ?</Text><TouchableOpacity onPress = { () => navigate('Logout') } ><Text style = { styles.signupText } >Sign Up</Text></TouchableOpacity></View>
       </View>
       </View>
 
@@ -112,7 +112,7 @@ export default class Login extends React.Component {
   }
   else
   {
-     return (<View style = { styles.container }><ActivityIndicator size="large" color="#0000ff" /></View>);
+     return (<View style = { styles.container }><ActivityIndicator size="large" color="#fff" /></View>);
   }
 
 
@@ -124,30 +124,55 @@ const styles = StyleSheet.create({
      container : {
        flex : 1,
        alignItems : 'center',
-       justifyContent : 'center'
+       justifyContent : 'center',
+       backgroundColor : 'rgb(32,53,70)'
      },
      inputBox:{
-       width:'70%',
+       width:'75%',
        borderRadius : 25,
-       backgroundColor : '#E0E0E0',
-       height:50,
-       color:'#212121',
-       padding : 10,
+       backgroundColor : 'rgba(255,255,255,0.2)',
+       height:40,
+       color:'#fff',
+       paddingHorizontal : 10,
        fontSize : 15,
-       margin : 10
+       margin : 8,
      },
      button : {
-       width:'70%',
-       margin : 30
+       width:'75%',
+       backgroundColor  :'#f7c744',
+       alignItems : 'center',
+       padding: 10,
+       marginTop:10,
+       marginBottom : 20,
+       borderRadius : 25,
+       justifyContent : 'center',
+       elevation : 8,
+     },
+     buttonText : {
+        color : '#fff',
+        fontSize : 15
      },
      signupTextContent : {
-       flexGrow : 0.4,
        alignItems : 'center',
-       justifyContent : 'flex-end'
+       justifyContent : 'flex-end',
+       marginTop : 10
+       
+     },
+     signupText:{
+      color:'#fff',
+      fontWeight : 'bold'
+
      },
      logoText : {
        fontSize : 25,
-       marginBottom : 20
+       marginBottom : 60,
+       color:'#fff',
+       padding:20,
+       fontWeight : 'bold'
+     },
+     signUpView : {
+      flexDirection : 'row',
      }
 
 });
+
